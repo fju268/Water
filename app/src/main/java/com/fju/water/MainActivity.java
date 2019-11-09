@@ -1,6 +1,7 @@
 package com.fju.water;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -20,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText month;
     private EditText next;
+    float degree_month;
+    float degree_next;
+    float money=0.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,45 +48,68 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void calculate(View view){
-        float degree_month = Float.parseFloat((month.getText().toString()));
-        float degree_next = Float.parseFloat((next.getText().toString()));
-        float money=0.0f;
-        if(!TextUtils.isEmpty(month.getText().toString())){
-            if(degree_month>=1&&degree_month<=10){
-                money =(degree_month*7.35f)+0;
-            }else if (degree_month>=11&&degree_month<=30){
-                money =(degree_month*9.45f)-21;
-            }else if (degree_month>=31&&degree_month<=50){
-                money =(degree_month*11.25f)-84;
-            }else if (degree_month>=51){
-                money =(degree_month*12.075f)-110.25f;
+        try {
+             degree_month = Float.parseFloat((month.getText().toString()));
+        }catch (Exception e){
+            degree_month = 0.0f;
+        }
+        try {
+            degree_next = Float.parseFloat((next.getText().toString()));
+        }catch (Exception e){
+            degree_next = 0.0f;
+        }
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                month.setText("");
+                next.setText("");
             }
+        };
+
+            if (!TextUtils.isEmpty(month.getText())) {
+                if (degree_month >= 1 && degree_month <= 10) {
+                    money = (degree_month * 7.35f) + 0;
+                } else if (degree_month >= 11 && degree_month <= 30) {
+                    money = (degree_month * 9.45f) - 21;
+                } else if (degree_month >= 31 && degree_month <= 50) {
+                    money = (degree_month * 11.25f) - 84;
+                } else if (degree_month >= 51) {
+                    money = (degree_month * 12.075f) - 110.25f;
+                }
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("每月抄表費用")
-                        .setMessage("費用: "+money)
-                        .setPositiveButton("ok",null)
-                        .show();
-
-
-        }else if (!TextUtils.isEmpty(next.getText().toString())){
-            if(degree_next>=1&&degree_next<=20){
-                money =(degree_next*7.35f)+0;
-            }else if (degree_next>=21&&degree_next<=60){
-                money =(degree_next*9.45f)-42;
-            }else if (degree_month>=61&&degree_month<=100){
-                money =(degree_month*11.25f)-168;
-            }else if (degree_month>=101){
-                money =(degree_month*12.075f)-220.5f;
-            }
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("隔月抄表費用")
                         .setMessage("費用: " + money)
-                        .setPositiveButton("ok", null)
+                        .setPositiveButton("ok", listener)
                         .show();
+
+            }
+
+
+        if (!TextUtils.isEmpty(next.getText())) {
+            if (degree_next >= 1 && degree_next <= 20) {
+                money = (degree_next * 7.35f) + 0;
+            } else if (degree_next >= 21 && degree_next <= 60) {
+                money = (degree_next * 9.45f) - 42;
+            } else if (degree_next >= 61 && degree_next <= 100) {
+                money = (degree_next * 11.25f) -168 ;
+            } else if (degree_next >= 101) {
+                money = (degree_next * 12.075f) - 220.5f;
+            }
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("隔月抄表費用")
+                    .setMessage("費用: " + money)
+                    .setPositiveButton("ok", listener)
+                    .show();
 
         }
 
-
+        if(TextUtils.isEmpty(next.getText())&&TextUtils.isEmpty(month.getText())){
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("錯誤")
+                    .setMessage("無法計算")
+                    .setPositiveButton("ok", listener)
+                    .show();
+        }
 
 
     }

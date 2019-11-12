@@ -2,6 +2,7 @@ package com.fju.water;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,6 +15,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -34,20 +36,13 @@ public class MainActivity extends AppCompatActivity {
         month = findViewById(R.id.month);
         next = findViewById(R.id.next);
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
-
-
-
-
-
-    public void calculate(View view){
+            public void onClick(View v) {
+                String month1 = month.getText().toString();
+                String next1 = next.getText().toString();
+        /*
         try {
              degree_month = Float.parseFloat((month.getText().toString()));
         }catch (Exception e){
@@ -58,64 +53,73 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
             degree_next = 0.0f;
         }
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                month.setText("");
-                next.setText("");
-            }
-        };
 
-            if (!TextUtils.isEmpty(month.getText())) {
-                if (degree_month >= 1 && degree_month <= 10) {
-                    money = (degree_month * 7.35f) + 0;
-                } else if (degree_month >= 11 && degree_month <= 30) {
-                    money = (degree_month * 9.45f) - 21;
-                } else if (degree_month >= 31 && degree_month <= 50) {
-                    money = (degree_month * 11.25f) - 84;
-                } else if (degree_month >= 51) {
-                    money = (degree_month * 12.075f) - 110.25f;
-                }
-                new AlertDialog.Builder(MainActivity.this)
+         */
+                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        month.setText("");
+                        next.setText("");
+                    }
+                };
+                if (!TextUtils.isEmpty(month1)){
+                    degree_month = Float.parseFloat(month1);
+                    if (degree_month >= 1 && degree_month <= 10) {
+                        money = (degree_month * 7.35f) + 0;
+                    } else if (degree_month >= 11 && degree_month <= 30) {
+                        money = (degree_month * 9.45f) - 21;
+                    } else if (degree_month >= 31 && degree_month <= 50) {
+                        money = (degree_month * 11.25f) - 84;
+                    } else if (degree_month >= 51) {
+                        money = (degree_month * 12.075f) - 110.25f;
+                    }
+                    Intent intent = new Intent(MainActivity.this,ResultActivity.class);
+                    startActivity(intent);
+               /* new AlertDialog.Builder(MainActivity.this)
                         .setTitle("每月抄表費用")
                         .setMessage("費用: " + money)
                         .setPositiveButton("ok", listener)
                         .show();
+                        */
 
+                }else if (!TextUtils.isEmpty(next1)){
+                    degree_next = Float.parseFloat(next1);
+                    if (degree_next >= 1 && degree_next <= 20) {
+                        money = (degree_next * 7.35f) + 0;
+                    } else if (degree_next >= 21 && degree_next <= 60) {
+                        money = (degree_next * 9.45f) - 42;
+                    } else if (degree_next >= 61 && degree_next <= 100) {
+                        money = (degree_next * 11.25f) -168 ;
+                    } else if (degree_next >= 101) {
+                        money = (degree_next * 12.075f) - 220.5f;
+                    }
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("隔月抄表費用")
+                            .setMessage("費用: " + money)
+                            .setPositiveButton("ok", listener)
+                            .show();
+                }else if(TextUtils.isEmpty(month1)&&TextUtils.isEmpty(next1)){
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("錯誤")
+                            .setMessage("無法計算")
+                            .setPositiveButton("ok", listener)
+                            .show();
+                }
             }
-
-
-        if (!TextUtils.isEmpty(next.getText())) {
-            if (degree_next >= 1 && degree_next <= 20) {
-                money = (degree_next * 7.35f) + 0;
-            } else if (degree_next >= 21 && degree_next <= 60) {
-                money = (degree_next * 9.45f) - 42;
-            } else if (degree_next >= 61 && degree_next <= 100) {
-                money = (degree_next * 11.25f) -168 ;
-            } else if (degree_next >= 101) {
-                money = (degree_next * 12.075f) - 220.5f;
+        });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("隔月抄表費用")
-                    .setMessage("費用: " + money)
-                    .setPositiveButton("ok", listener)
-                    .show();
-
-        }
-
-        if(TextUtils.isEmpty(next.getText())&&TextUtils.isEmpty(month.getText())){
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("錯誤")
-                    .setMessage("無法計算")
-                    .setPositiveButton("ok", listener)
-                    .show();
-        }
-
+        });
 
     }
 
+    public void calculate(View view){
 
-
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,12 +134,10 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

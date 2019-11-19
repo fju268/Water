@@ -69,11 +69,12 @@ public class MainActivity extends AppCompatActivity {
                     } else if (degree_month >= 11 && degree_month <= 30) {
                         money = (degree_month * 9.45f) - 21;
                     } else if (degree_month >= 31 && degree_month <= 50) {
-                        money = (degree_month * 11.25f) - 84;
+                        money = (degree_month * 11.55f) - 84;
                     } else if (degree_month >= 51) {
                         money = (degree_month * 12.075f) - 110.25f;
                     }
                     Intent intent = new Intent(MainActivity.this,ResultActivity.class);
+                    intent.putExtra("MONEY",money);
                     startActivity(intent);
                /* new AlertDialog.Builder(MainActivity.this)
                         .setTitle("每月抄表費用")
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     } else if (degree_next >= 21 && degree_next <= 60) {
                         money = (degree_next * 9.45f) - 42;
                     } else if (degree_next >= 61 && degree_next <= 100) {
-                        money = (degree_next * 11.25f) -168 ;
+                        money = (degree_next * 11.55f) -168 ;
                     } else if (degree_next >= 101) {
                         money = (degree_next * 12.075f) - 220.5f;
                     }

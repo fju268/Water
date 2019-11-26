@@ -74,14 +74,14 @@ public class MainActivity extends AppCompatActivity {
                         money = (degree_month * 12.075f) - 110.25f;
                     }
                     Intent intent = new Intent(MainActivity.this,ResultActivity.class);
-                    intent.putExtra("MONEY",money);
+                    intent.putExtra(getString(R.string.extra_money),money);
                     startActivity(intent);
-               /* new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("每月抄表費用")
-                        .setMessage("費用: " + money)
-                        .setPositiveButton("ok", listener)
-                        .show();
-                        */
+//                new AlertDialog.Builder(MainActivity.this)
+//                        .setTitle("每月抄表費用")
+//                        .setMessage(getString(R.string.fee) + money)
+//                        .setPositiveButton(R.string.ok, listener)
+//                        .show();
+
 
                 }else if (!TextUtils.isEmpty(next1)){
                     degree_next = Float.parseFloat(next1);

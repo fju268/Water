@@ -16,16 +16,19 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText month;
-    private EditText next;
     float degree_month;
-    float degree_next;
     float money=0.0f;
+    boolean isNext =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +37,22 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         month = findViewById(R.id.month);
-        next = findViewById(R.id.next);
         FloatingActionButton fab = findViewById(R.id.fab);
+        Switch sw = findViewById(R.id.sw);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isNext = isChecked;
+                TextView text = findViewById(R.id.tyoe);
+                text.setText(isChecked?getString(R.string.every_other_month):getString(R.string.monthly));
+            }
+        });
         Button button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String month1 = month.getText().toString();
-                String next1 = next.getText().toString();
+
         /*
         try {
              degree_month = Float.parseFloat((month.getText().toString()));
@@ -59,20 +70,33 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         month.setText("");
-                        next.setText("");
                     }
                 };
                 if (!TextUtils.isEmpty(month1)){
-                    degree_month = Float.parseFloat(month1);
-                    if (degree_month >= 1 && degree_month <= 10) {
-                        money = (degree_month * 7.35f) + 0;
-                    } else if (degree_month >= 11 && degree_month <= 30) {
-                        money = (degree_month * 9.45f) - 21;
-                    } else if (degree_month >= 31 && degree_month <= 50) {
-                        money = (degree_month * 11.55f) - 84;
-                    } else if (degree_month >= 51) {
-                        money = (degree_month * 12.075f) - 110.25f;
+                    if (!isNext) {
+                        degree_month = Float.parseFloat(month1);
+                        if (degree_month >= 1 && degree_month <= 10) {
+                            money = (degree_month * 7.35f) + 0;
+                        } else if (degree_month >= 11 && degree_month <= 30) {
+                            money = (degree_month * 9.45f) - 21;
+                        } else if (degree_month >= 31 && degree_month <= 50) {
+                            money = (degree_month * 11.55f) - 84;
+                        } else if (degree_month >= 51) {
+                            money = (degree_month * 12.075f) - 110.25f;
+                        }
+                    }else{
+
+                        if (degree_month >= 1 && degree_month <= 20) {
+                            money = (degree_month * 7.35f) + 0;
+                        } else if (degree_month >= 21 && degree_month <= 60) {
+                            money = (degree_month * 9.45f) - 42;
+                        } else if (degree_month >= 61 && degree_month <= 100) {
+                            money = (degree_month * 11.55f) -168 ;
+                        } else if (degree_month >= 101) {
+                            money = (degree_month * 12.075f) - 220.5f;
+                        }
                     }
+
                     Intent intent = new Intent(MainActivity.this,ResultActivity.class);
                     intent.putExtra(getString(R.string.extra_money),money);
                     startActivity(intent);
@@ -83,29 +107,31 @@ public class MainActivity extends AppCompatActivity {
 //                        .show();
 
 
-                }else if (!TextUtils.isEmpty(next1)){
-                    degree_next = Float.parseFloat(next1);
-                    if (degree_next >= 1 && degree_next <= 20) {
-                        money = (degree_next * 7.35f) + 0;
-                    } else if (degree_next >= 21 && degree_next <= 60) {
-                        money = (degree_next * 9.45f) - 42;
-                    } else if (degree_next >= 61 && degree_next <= 100) {
-                        money = (degree_next * 11.55f) -168 ;
-                    } else if (degree_next >= 101) {
-                        money = (degree_next * 12.075f) - 220.5f;
-                    }
-                    new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("隔月抄表費用")
-                            .setMessage("費用: " + money)
-                            .setPositiveButton("ok", listener)
-                            .show();
-                }else if(TextUtils.isEmpty(month1)&&TextUtils.isEmpty(next1)){
-                    new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("錯誤")
-                            .setMessage("無法計算")
-                            .setPositiveButton("ok", listener)
-                            .show();
                 }
+
+//                else if (!TextUtils.isEmpty(next1)){
+//                    degree_next = Float.parseFloat(next1);
+//                    if (degree_next >= 1 && degree_next <= 20) {
+//                        money = (degree_next * 7.35f) + 0;
+//                    } else if (degree_next >= 21 && degree_next <= 60) {
+//                        money = (degree_next * 9.45f) - 42;
+//                    } else if (degree_next >= 61 && degree_next <= 100) {
+//                        money = (degree_next * 11.55f) -168 ;
+//                    } else if (degree_next >= 101) {
+//                        money = (degree_next * 12.075f) - 220.5f;
+//                    }
+//                    new AlertDialog.Builder(MainActivity.this)
+//                            .setTitle("隔月抄表費用")
+//                            .setMessage("費用: " + money)
+//                            .setPositiveButton("ok", listener)
+//                            .show();
+//                }else if(TextUtils.isEmpty(month1)&&TextUtils.isEmpty(next1)){
+//                    new AlertDialog.Builder(MainActivity.this)
+//                            .setTitle("錯誤")
+//                            .setMessage("無法計算")
+//                            .setPositiveButton("ok", listener)
+//                            .show();
+//                }
             }
         });
         fab.setOnClickListener(new View.OnClickListener() {
